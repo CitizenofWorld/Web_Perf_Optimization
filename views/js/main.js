@@ -401,19 +401,24 @@ var pizzaElementGenerator = function(i) {
 // resizePizzas(size) is called when the slider in the "Our Pizzas" section of the website moves.
 var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API function
+  var sizePercent = " ";
+  var pizzaRandomDiv = document.getElementById("randomPizzas");
 
   // Changes the value for the size of the pizza above the slider
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.querySelector("#pizzaSize").innerHTML = "Small";
+        document.getElementById("#pizzaSize").text = "Small";  //changed querySelector to getElementById
+        pizzaRandomDiv.className = "roe smallPizzas";
         return;
       case "2":
-        document.querySelector("#pizzaSize").innerHTML = "Medium";
+        document.getElementById("pizzaSize").text = "Medium";
+        pizzaRandomDiv.className = "row mediumPizzas";
         return;
       case "3":
-        document.querySelector("#pizzaSize").innerHTML = "Large";
-        return;
+          document.getElementById("pizzaSize").text = "Large";
+          pizzaRandomDiv.className  = "row largePizzas";
+          return;
       default:
         console.log("bug in changeSliderLabel");
     }
@@ -449,11 +454,11 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    var randomPizzas = document.querySelectorALL(".randomPizzaContainer");
+    var randomPizzas = document.querySelectorALL("randomPizzaContainer");
     for (var i = 0; i < randomPizzas.length; i++) {
       var dx = determineDx(randomPizzas)[i], size);
       var newwidth = (randomPizzas[i].offsetWidth + dx) + 'px';
-     randomPizzas[i].style.width = newwidth;
+      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     }
   }
 
@@ -503,12 +508,11 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
-  var index = 0;
-  items.forEach(function(item)) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (index % 5));
-    item.style.left = (item.offsetleft + 100 * phase)+ 'px';
+  for (var i = 0; i < items.length; i++) {
+    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
-console.log(updatePositions);
+
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
   window.performance.mark("mark_end_frame");
